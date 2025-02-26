@@ -4,7 +4,7 @@ En el siguiente proyecto se visualizan eventos de un partido de fútbol sobre un
 
 Aquí se pueden ver los diferentes plots generados a partir del código.
 
-![Polígono hexagonal](convex-hull-passes.png)  
+![Polígono hexagonal](convex-hull-pases.png)  
 ![Polígono hexagonal combinado](combined-convex-plot.png)  
 ![Representación vectorial](vector-plot.png)  
 
