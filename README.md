@@ -3,6 +3,6 @@ En el siguiente proyecto se visualizan eventos de un partido de futbol sobre un 
 
 Aquí se pueden ver los diferentes plots generados a partir del código.
 
-![Polígono hexagonal](imagenes/convex-hull.png)
-![Polígono hexagonal combinado](imagenes/combinated-convex-hull.png)
-![Representación vectorial](imagenes/vector-plot.png)
+![Polígono hexagonal](convex-hull/convex-hull.png)
+![Polígono hexagonal combinado](convex-hull/combinated-convex-hull.png)
+![Representación vectorial](convex-hull/vector-plot.png)
