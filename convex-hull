@@ -6,20 +6,18 @@ library(ggforce)
 library(ggExtra)
 library(tidyverse)
 
-setwd("/Users/rogersans/Desktop/Màster Big Data Deportivo/Máster Big Data Deportivo/M4_ANÁLISIS DE DATOS DEPORTIVOS CON R Y PHYTON/Examen_R/Ejercicios_resueltos_R/data")
-
 full_data <- read_delim("full_data.txt", ";", 
                         locale = locale(decimal_mark = ","),
                         trim_ws = TRUE)
 
-# EJERCICIO 1. Identificar todos los pases realizados por Sergio Busquets
+# SELECCIÓN DE JUGADOR Y EVENTO
 jugador_elegido <- c("Busquets")
 evento_elegido <- c("Passes_All")
 
 data_player1 <- subset(full_data, Jugador == jugador_elegido & 
                         Sección == evento_elegido)
 
-# EJERCICIO 2. Representar un campo de fútbol, donde además se vean las porterias, los arcos correspondientes a los saques de córner y los arcos correspondientes al área
+# DISEÑO CAMPO DEE FUTBOL
 pitch_plot <- ggplot() +
  
   geom_rect(mapping = aes(xmin = 0.0, xmax = 596.97, 
@@ -82,10 +80,7 @@ pitch_plot <- ggplot() +
   scale_x_continuous(limits = c(0,605), expand = c(0.01,0)) +
   scale_y_continuous(limits = c(0,425), expand = c(0,0))
 
-
-pitch_plot
-
-# EJERCICIO 3. Representar en el campo los pases realizados, mediante puntos de sus orígenes, creando un área convexa (investigar sobre Convex Hull en R) que englobe todos los puntos correspondientes a dichos eventos
+# DISEÑO CONVEX-HULL
 plot_origenpases <- pitch_plot + 
   geom_point(data_player1, mapping = aes(x= x1-58.015, y= 396 - (y1 - 50.5), color= factor(Jugador),shape= factor(Resultado)), 
              size = 5) +
@@ -106,27 +101,7 @@ plot_convexhull <- plot_origenpases +
            shape = guide_legend(order = 2))
 plot_convexhull
 
-# EJERCICIO 4. Representar como diagrama marginal un diagrama de violín (investigar Violin plot en R y, en particular, en ggMarginal) que muestre la distribución espacial en x e y de dichos eventos
-ggExtra::ggMarginal(plot_origenpases,
-                    type = "violin")
-
-# EJERCICIO EXTRA 1. Generar un nuevo gráfico donde se muestren los vectores de pases realizados, visualizando así tanto origen como destino
-plot_vectores <- pitch_plot +
-  geom_segment(data_player1, mapping = aes(x = x1 - 58.015, y = 396 - (y1 - 50.5), xend = x2 - 58.015, yend = 396 - (y2 - 50.5), color = factor(Resultado)), arrow = arrow(length = unit(0.012,"npc"))) +
-  theme(legend.title = element_blank()) +
-  scale_color_manual(values = c("steelblue", "red", "green"))
-
-plot_vectores
-
-# EJERCICIO EXTRA 2. Completar la información del gráfico (cualquiera de los dos propuestos) con el nombre del jugador, del club y rival que se esté mostrando
-plot_vectores <- pitch_plot +
-  labs(title = "Sergio Busquest (FC Barcelona) vs Real Madrid") +
-  geom_segment(data_player1, mapping = aes(x = x1 - 58.015, y = 396 - (y1 - 50.5), xend = x2 - 58.015, yend = 396 - (y2 - 50.5), color = factor(Resultado)), arrow = arrow(length = unit(0.012,"npc"))) +
-  theme(legend.title = element_blank()) +
-  scale_color_manual(values = c("steelblue", "red", "green"))
-
-plot_vectores
-# EJERCICIO EXTRA 3. Extraer de la información recogida en la tabla el resultado del partido y mostrarlo en el gráfico  (cualquiera de los dos propuestos) como complemento informativo
+# DISEÑO DIAGRAMA DE VECTORES
 plot_vectores <- pitch_plot +
   labs(title = "Sergio Busquest (FC Barcelona) vs Real Madrid",
        subtitle = "RMA 2-3 FCB") +
@@ -135,7 +110,8 @@ plot_vectores <- pitch_plot +
   scale_color_manual(values = c("steelblue", "red", "green"))
 
 plot_vectores
-# EJERCICIO EXTRA 4. Mostrar en el primer gráfico las áreas convexas de pases realizados de todos los defensas y Sergio Busquets del FC Barcelona en el partido contra el Real Madrid. Mostrar cada una con un color diferente
+
+# CONVEX-HULL COMBINADOS
 lst_jugadores <- c("Busquets", "Alba", "Piqué", "Umtiti", "Roberto")
 linea_defensiva <- full_data %>%
   filter(Equipo %in% "Barcelona", Rival %in% "Real Madrid", Sección %in% "Passes_All", Jugador %in% lst_jugadores)
@@ -154,4 +130,3 @@ plot_convexhull5 <- pitch_plot +
   guides(color = guide_legend(order = 1),
          shape = guide_legend(order = 2))
 plot_convexhull5
-#EJERCICIO EXTRA 5. Comentar, tácticamente, los resultados obtenidos
